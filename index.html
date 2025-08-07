@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VR_Audio - Technika, felújítás</title>
+  <meta name="description" content="VR_Audio – Használt audio eszközök eladása, javítása és felújítása. Erősítők, hangfalak és egyéb technikai eszközök megbízhatóan.">
+  <meta name="keywords" content="VR_Audio, hangtechnika, felújítás, javítás, erősítő, hangfal, vintage, audio, eladó technika, hifi">
+  <meta name="author" content="VR_Audio">
+  <meta name="robots" content="index, follow">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    @keyframes fadeInUp {
+      0% {opacity: 0; transform: translateY(30px);}
+      100% {opacity: 1; transform: translateY(0);}
+    }
+
+    .fade-in {
+      animation: fadeInUp 1s ease forwards;
+    }
+
+    .watermark {
+      position: fixed;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 140px;
+      color: rgba(255, 255, 255, 0.03);
+      top: 20%;
+      left: 50%;
+      transform: translateX(-50%) rotate(-20deg);
+      pointer-events: none;
+      z-index: 0;
+      user-select: none;
+    }
+
+    header {
+      background: rgba(0,0,0,0.6);
+      padding: 40px 20px;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.6);
+      z-index: 1;
+      position: relative;
+    }
+
+    header h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 36px;
+      color: #00e5ff;
+      text-shadow: 0 0 10px #00e5ff;
+    }
+
+    .contact-btn {
+      margin-top: 20px;
+      background: #00e5ff;
+      color: #000;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0, 229, 255, 0.5);
+    }
+
+    .ads-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 30px;
+      padding: 40px;
+      z-index: 1;
+      position: relative;
+    }
+
+    .ad-card {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 15px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      animation: fadeInUp 1s ease forwards;
+    }
+
+    .ad-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(0, 229, 255, 0.4);
+    }
+
+    .ad-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .ad-content {
+      padding: 15px;
+      text-align: center;
+    }
+
+    .ad-description {
+      font-size: 15px;
+      color: #ddd;
+      margin-bottom: 10px;
+    }
+
+    .ad-contact {
+      font-weight: bold;
+      color: #80d8ff;
+      margin-bottom: 6px;
+    }
+
+    .ad-price {
+      font-size: 18px;
+      font-weight: bold;
+      color: #ff8f00;
+    }
+
+    .side-bar {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      width: 10px;
+      background: linear-gradient(to bottom, #00e5ff, #7c4dff);
+      z-index: 1;
+    }
+    .side-bar.left { left: 0; }
+    .side-bar.right { right: 0; }
+
+    footer {
+      background: rgba(0,0,0,0.6);
+      padding: 40px 20px;
+      text-align: center;
+      color: #ccc;
+      box-shadow: 0 -4px 10px rgba(0,0,0,0.6);
+      margin-top: 60px;
+    }
+
+    footer h2 {
+      color: #00e5ff;
+      font-family: 'Orbitron', sans-serif;
+    }
+
+    footer a {
+      color: #80d8ff;
+      text-decoration: underline;
+    }
+
+    @media (max-width: 600px) {
+      .watermark {
+        font-size: 60px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="side-bar left"></div>
+  <div class="side-bar right"></div>
+  <div class="watermark">VR_Audio</div>
+
+  <header class="fade-in">
+    <h1>VR_Audio - Technika, felújítás</h1>
+    <button class="contact-btn" onclick="document.getElementById('kapcsolat').scrollIntoView({ behavior: 'smooth' });">Kapcsolat</button>
+  </header>
+
+  <div class="ads-container" id="adsContainer"></div>
+
+  <script>
+    const maxAds = 15;
+    const container = document.getElementById("adsContainer");
+
+    fetch("hirdetesek.json")
+      .then(response => response.json())
+      .then(ads => {
+        for (let i = 0; i < ads.length && i < maxAds; i++) {
+          const ad = ads[i];
+          const card = document.createElement("div");
+          card.className = "ad-card fade-in";
+
+          const img = document.createElement("img");
+          img.src = ad.img;
+          card.appendChild(img);
+
+          const content = document.createElement("div");
+          content.className = "ad-content";
+
+          const desc = document.createElement("div");
+          desc.className = "ad-description";
+          desc.textContent = ad.description;
+          content.appendChild(desc);
+
+          const contact = document.createElement("div");
+          contact.className = "ad-contact";
+          contact.textContent = ad.contact;
+          content.appendChild(contact);
+
+          const price = document.createElement("div");
+          price.className = "ad-price";
+          price.textContent = ad.price;
+          content.appendChild(price);
+
+          card.appendChild(content);
+          container.appendChild(card);
+        }
+      })
+      .catch(error => {
+        console.error("Nem sikerült betölteni a hirdetéseket:", error);
+      });
+  </script>
+
+  <footer class="fade-in">
+    <div>
+      <h2>Jogi Nyilatkozat</h2>
+      <p style="max-width: 600px; margin: 0 auto; font-size: 14px;">
+        A weboldalon található képek, leírások és tartalmak a VR_Audio tulajdonát képezik. Engedély nélküli másolásuk vagy felhasználásuk jogi következményeket vonhat maga után. A hirdetések tájékoztató jellegűek. Kérjük, a pontos információkért lépjen kapcsolatba velünk.
+      </p>
+      <p style="margin-top: 10px;">
+        📄 <a href="https://www.nemzetiszabalyozas.hu/jogvedelem" target="_blank">Részletes jogi szabályzat megtekintése</a>
+      </p>
+    </div>
+
+    <div id="kapcsolat" style="margin-top: 40px;">
+      <h2>Kapcsolat</h2>
+      <p>📞 Telefon: <a href="tel:+36301234567">+36 30 123 4567</a></p>
+      <p>✉️ Email: <a href="mailto:email@vraudio.hu">email@vraudio.hu</a></p>
+      <p>💬 Viber: <a href="viber://chat?number=%2B36301234567">Üzenet Viber-en</a></p>
+    </div>
+  </footer>
+</body>
+</html>
