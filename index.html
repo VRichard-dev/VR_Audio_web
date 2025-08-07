@@ -4,13 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>VR_Audio</title>
-
   <meta name="description" content="VR_Audio – Használt audio eszközök eladása, javítása és felújítása. Erősítők, hangfalak és egyéb technikai eszközök megbízhatóan." />
   <meta name="keywords" content="VR_Audio, hangtechnika, felújítás, javítás, erősítő, hangfal, vintage, audio, eladó technika, hifi" />
   <meta name="author" content="VR_Audio" />
   <meta name="robots" content="index, follow" />
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet" />
-
   <style>
     body {
       margin: 0;
@@ -45,12 +43,13 @@
     header {
       background: rgba(0,0,0,0.6);
       padding: 40px 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
       box-shadow: 0 4px 10px rgba(0,0,0,0.6);
       position: relative;
       z-index: 1;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
 
     header h1 {
@@ -61,29 +60,33 @@
       margin: 0;
     }
 
-    .header-buttons {
-      display: flex;
-      gap: 15px;
-    }
-
-    .btn {
+    .contact-btn {
+      margin-top: 20px;
       background: #00e5ff;
       color: #000;
       border: none;
-      padding: 10px 22px;
+      padding: 10px 20px;
       border-radius: 10px;
       font-weight: bold;
       cursor: pointer;
       box-shadow: 0 4px 10px rgba(0, 229, 255, 0.5);
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      transition: background-color 0.3s ease, color 0.3s ease;
-      font-family: 'Segoe UI', sans-serif;
     }
 
-    .btn:hover {
+    /* Belépés gomb stílusa */
+    .login-btn {
+      background: #00e5ff;
+      color: #000;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0, 229, 255, 0.6);
+      transition: background-color 0.3s ease;
+      font-family: 'Segoe UI', sans-serif;
+      text-decoration: none;
+    }
+    .login-btn:hover {
       background-color: #007ea7;
       color: #fff;
     }
@@ -180,9 +183,6 @@
         gap: 10px;
         text-align: center;
       }
-      .header-buttons {
-        justify-content: center;
-      }
     }
   </style>
 </head>
@@ -193,10 +193,7 @@
 
   <header class="fade-in">
     <h1>VR_Audio</h1>
-    <div class="header-buttons">
-      <button class="btn" onclick="document.getElementById('kapcsolat').scrollIntoView({ behavior: 'smooth' });">Kapcsolat</button>
-      <a href="/admin/" class="btn" title="Belépés az admin felületre">Belépés</a>
-    </div>
+    <a href="/admin/" class="login-btn" title="Belépés az admin felületre">Belépés</a>
   </header>
 
   <div class="ads-container" id="adsContainer"></div>
