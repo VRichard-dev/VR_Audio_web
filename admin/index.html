@@ -92,9 +92,9 @@
           messageDiv.textContent = `Szia, ${user.email}! Üdvözöllek az admin felületen.`;
           loginBtn.style.display = "none";
           logoutBtn.style.display = "inline-block";
-          // Itt tudod betölteni az admin funkciókat, vagy átirányítani a szerkesztő oldalra
-          // Például:
-          // window.location.href = '/admin/editor.html';
+
+          // Átirányítás a szerkesztő oldalra
+          window.location.href = "/admin/editor.html";
         } else {
           messageDiv.textContent = "Sajnálom, nincs hozzáférésed az admin felülethez.";
           loginBtn.style.display = "none";
@@ -136,3 +136,4 @@
   </script>
 </body>
 </html>
+
