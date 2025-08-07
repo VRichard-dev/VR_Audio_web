@@ -6,142 +6,131 @@
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      background: #121212;
       color: #eee;
       margin: 0;
       padding: 0;
-      min-height: 100vh;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
+      min-height: 100vh;
     }
     header {
-      font-size: 2rem;
-      font-weight: bold;
-      color: #00e5ff;
-      margin-bottom: 2rem;
-      font-family: 'Orbitron', sans-serif;
-    }
-    button {
       background-color: #00e5ff;
       color: #000;
-      border: none;
-      padding: 15px 30px;
-      border-radius: 10px;
+      padding: 1rem 2rem;
+      text-align: center;
       font-weight: bold;
+      font-size: 1.5rem;
+      box-shadow: 0 2px 8px rgba(0, 229, 255, 0.5);
+    }
+    main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      text-align: center;
+    }
+    #message {
       font-size: 1.2rem;
+      margin-bottom: 20px;
+    }
+    button {
       cursor: pointer;
-      box-shadow: 0 4px 10px rgba(0,229,255,0.5);
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 1rem;
+      background-color: #00e5ff;
+      color: #000;
       transition: background-color 0.3s ease;
     }
     button:hover {
       background-color: #007ea7;
       color: #fff;
     }
-    #logout-btn {
-      margin-top: 20px;
-      display: none;
-    }
-    #message {
-      margin-top: 2rem;
-      font-size: 1.1rem;
-      color: #aaa;
-      max-width: 500px;
-    }
   </style>
 </head>
 <body>
   <header>VR_Audio Admin Felület</header>
+  <main>
+    <div>
+      <div id="message">Kérlek jelentkezz be az admin felület használatához.</div>
+      <button id="login-btn">Belépés / Regisztráció</button>
+      <button id="logout-btn" style="display:none; margin-left: 10px;">Kijelentkezés</button>
+    </div>
+  </main>
 
-  <button id="login-btn">Belépés</button>
-  <button id="logout-btn">Kijelentkezés</button>
-
-  <div id="message"></div>
-
-  <!-- Auth0 JS SDK -->
   <script src="https://cdn.auth0.com/js/auth0-spa-js/1.19/auth0-spa-js.production.js"></script>
-
   <script>
+    const auth0Domain = "dev-1k4duchefaqtjltq.eu.auth0.com";
+    const auth0ClientId = "kzHrHB7oC6GG8WEnIlRJTLMGNsNfC0qW";
+
     let auth0 = null;
-
-    const allowedUsers = [
-      "vecseyr1@gmail.com",
-      "riki.vecsey@gmail.com"
-    ];
-
-    const config = {
-      domain: "dev-1k4duchefaqtjltq.eu.auth0.com",
-      clientId: "kzHrHB7oC6GG8WEnIlRJTLMGNsNfC0qW",
-      redirectUri: window.location.origin + "/admin/"
-    };
 
     const loginBtn = document.getElementById('login-btn');
     const logoutBtn = document.getElementById('logout-btn');
-    const message = document.getElementById('message');
+    const messageDiv = document.getElementById('message');
 
-    const configureClient = async () => {
+    async function configureClient() {
       auth0 = await createAuth0Client({
-        domain: config.domain,
-        client_id: config.clientId,
-        redirect_uri: config.redirectUri,
-        cacheLocation: 'localstorage'
+        domain: auth0Domain,
+        client_id: auth0ClientId,
+        redirect_uri: window.location.origin + "/admin/"
       });
-    };
+    }
 
-    const updateUI = async () => {
+    async function updateUI() {
       const isAuthenticated = await auth0.isAuthenticated();
 
       if (isAuthenticated) {
         const user = await auth0.getUser();
-        if (!allowedUsers.includes(user.email)) {
-          message.textContent = "Sajnáljuk, nincs hozzáférésed ehhez az oldalhoz.";
-          logoutBtn.style.display = 'none';
-          loginBtn.style.display = 'none';
+        const allowedEmails = ["vecseyr1@gmail.com", "riki.vecsey@gmail.com"];
 
-          setTimeout(() => {
-            auth0.logout({
-              returnTo: window.location.origin + "/admin/"
-            });
-          }, 3000);
-          return;
+        if (allowedEmails.includes(user.email)) {
+          messageDiv.textContent = `Szia, ${user.email}! Üdvözöllek az admin felületen.`;
+          loginBtn.style.display = "none";
+          logoutBtn.style.display = "inline-block";
+          // Itt tudod betölteni az admin funkciókat, vagy átirányítani a szerkesztő oldalra
+          // Például:
+          // window.location.href = '/admin/editor.html';
+        } else {
+          messageDiv.textContent = "Sajnálom, nincs hozzáférésed az admin felülethez.";
+          loginBtn.style.display = "none";
+          logoutBtn.style.display = "inline-block";
+          await auth0.logout({ returnTo: window.location.origin + "/admin/" });
         }
-
-        loginBtn.style.display = 'none';
-        logoutBtn.style.display = 'inline-block';
-        message.textContent = `Üdvözlünk, ${user.email}! Most már szerkesztheted a hirdetéseket.`;
-
-        window.location.href = "/";
       } else {
-        loginBtn.style.display = 'inline-block';
-        logoutBtn.style.display = 'none';
-        message.textContent = "Kérlek jelentkezz be, hogy hozzáférj a hirdetés szerkesztő felülethez.";
+        messageDiv.textContent = "Kérlek jelentkezz be az admin felület használatához.";
+        loginBtn.style.display = "inline-block";
+        logoutBtn.style.display = "none";
       }
-    };
-
-    loginBtn.addEventListener('click', async () => {
-      await auth0.loginWithRedirect();
-    });
-
-    logoutBtn.addEventListener('click', () => {
-      auth0.logout({
-        returnTo: window.location.origin + '/admin/'
-      });
-    });
+    }
 
     window.onload = async () => {
       await configureClient();
 
-      if (window.location.search.includes('code=') && window.location.search.includes('state=')) {
+      // Kezeljük az Auth0 visszatérést a redirect után
+      const query = window.location.search;
+      if (query.includes("code=") && query.includes("state=")) {
         try {
           await auth0.handleRedirectCallback();
-          window.history.replaceState({}, document.title, '/admin/');
-        } catch (e) {
-          console.error('Auth0 redirect callback hiba:', e);
+          window.history.replaceState({}, document.title, "/admin/");
+        } catch (err) {
+          console.error("Hiba a redirect feldolgozásakor:", err);
         }
       }
 
+      await updateUI();
+    };
+
+    loginBtn.onclick = async () => {
+      await auth0.loginWithRedirect();
+    };
+
+    logoutBtn.onclick = async () => {
+      await auth0.logout({ returnTo: window.location.origin + "/admin/" });
       await updateUI();
     };
   </script>
