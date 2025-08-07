@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin – VR_Audio</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #121212;
+      color: #eee;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    header {
+      background-color: #00e5ff;
+      color: #000;
+      padding: 1rem 2rem;
+      text-align: center;
+      font-weight: bold;
+      font-size: 1.5rem;
+      box-shadow: 0 2px 8px rgba(0, 229, 255, 0.5);
+    }
+    main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    }
+    #login-container {
+      background: rgba(0, 229, 255, 0.1);
+      padding: 2rem 3rem;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0, 229, 255, 0.4);
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+    }
+    button {
+      cursor: pointer;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 1rem;
+      background-color: #00e5ff;
+      color: #000;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #007ea7;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <header>VR_Audio Admin Felület</header>
+  <main>
+    <div id="login-container">
+      <h2>Bejelentkezés vagy Regisztráció</h2>
+      <button id="login-btn">Bejelentkezés / Regisztráció</button>
+      <button id="logout-btn" style="display:none; margin-top: 10px;">Kijelentkezés</button>
+    </div>
+  </main>
+
+  <!-- Auth0 JS SDK -->
+  <script src="https://cdn.auth0.com/js/auth0-spa-js/1.19/auth0-spa-js.production.js"></script>
+
+  <script>
+    // Auth0 konfiguráció (cseréld ki a saját adataiddal)
+    const auth0 = new auth0.WebAuth({
+      domain: "YOUR_AUTH0_DOMAIN",
+      clientID: "YOUR_AUTH0_CLIENT_ID",
+      redirectUri: window.location.origin + "/admin/",
+      responseType: "token id_token",
+      scope: "openid profile email"
+    });
+
+    const loginBtn = document.getElementById('login-btn');
+    const logoutBtn = document.getElementById('logout-btn');
+
+    // Ellenőrizzük a bejelentkezett felhasználót
+    function checkSession() {
+      auth0.checkSession({}, function(err, authResult) {
+        if (authResult && authResult.accessToken && authResult.idToken) {
+          showLogout();
+        } else {
+          showLogin();
+        }
+      });
+    }
+
+    function showLogin() {
+      loginBtn.style.display = "inline-block";
+      logoutBtn.style.display = "none";
+    }
+
+    function showLogout() {
+      loginBtn.style.display = "none";
+      logoutBtn.style.display = "inline-block";
+    }
+
+    loginBtn.addEventListener('click', function() {
+      auth0.authorize();
+    });
+
+    logoutBtn.addEventListener('click', function() {
+      auth0.logout({
+        returnTo: window.location.origin + "/admin/"
+      });
+      showLogin();
+    });
+
+    // Ezt hívd meg az oldal betöltésekor
+    window.onload = function() {
+      checkSession();
+    };
+  </script>
+</body>
+</html>
