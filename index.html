@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html lang="hu">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>VR_Audio</title>
-  <meta name="description" content="VR_Audio – Használt audio eszközök eladása, javítása és felújítása. Erősítők, hangfalak és egyéb technikai eszközök megbízhatóan." />
-  <meta name="keywords" content="VR_Audio, hangtechnika, felújítás, javítás, erősítő, hangfal, vintage, audio, eladó technika, hifi" />
-  <meta name="author" content="VR_Audio" />
-  <meta name="robots" content="index, follow" />
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet" />
+
+  <meta name="description" content="VR_Audio – Használt audio eszközök eladása, javítása és felújítása. Erősítők, hangfalak és egyéb technikai eszközök megbízhatóan.">
+  <meta name="keywords" content="VR_Audio, hangtechnika, felújítás, javítás, erősítő, hangfal, vintage, audio, eladó technika, hifi">
+  <meta name="author" content="VR_Audio">
+  <meta name="robots" content="index, follow">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
@@ -43,13 +44,10 @@
     header {
       background: rgba(0,0,0,0.6);
       padding: 40px 20px;
+      text-align: center;
       box-shadow: 0 4px 10px rgba(0,0,0,0.6);
-      position: relative;
       z-index: 1;
-
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      position: relative;
     }
 
     header h1 {
@@ -57,7 +55,6 @@
       font-size: 36px;
       color: #00e5ff;
       text-shadow: 0 0 10px #00e5ff;
-      margin: 0;
     }
 
     .contact-btn {
@@ -70,25 +67,6 @@
       font-weight: bold;
       cursor: pointer;
       box-shadow: 0 4px 10px rgba(0, 229, 255, 0.5);
-    }
-
-    /* Belépés gomb stílusa */
-    .login-btn {
-      background: #00e5ff;
-      color: #000;
-      border: none;
-      padding: 12px 24px;
-      border-radius: 10px;
-      font-weight: bold;
-      cursor: pointer;
-      box-shadow: 0 4px 10px rgba(0, 229, 255, 0.6);
-      transition: background-color 0.3s ease;
-      font-family: 'Segoe UI', sans-serif;
-      text-decoration: none;
-    }
-    .login-btn:hover {
-      background-color: #007ea7;
-      color: #fff;
     }
 
     .ads-container {
@@ -174,14 +152,40 @@
       text-decoration: underline;
     }
 
+    /* --- Új Belépés gomb stílus --- */
+    .login-button {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #00e5ff;
+      color: #000;
+      border: none;
+      padding: 12px 24px;
+      font-weight: bold;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0, 229, 255, 0.6);
+      font-family: 'Segoe UI', sans-serif;
+      transition: background-color 0.3s ease;
+      z-index: 1000;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .login-button:hover {
+      background-color: #007ea7;
+      color: #fff;
+    }
+
     @media (max-width: 600px) {
       .watermark {
         font-size: 60px;
       }
-      header {
-        flex-direction: column;
-        gap: 10px;
-        text-align: center;
+      .login-button {
+        top: 10px;
+        right: 10px;
+        padding: 8px 16px;
+        font-size: 14px;
       }
     }
   </style>
@@ -191,9 +195,12 @@
   <div class="side-bar right"></div>
   <div class="watermark">VR_Audio</div>
 
+  <!-- Belépés gomb jobb felső sarokban -->
+  <a href="/admin/" class="login-button" title="Belépés az admin felületre">Belépés</a>
+
   <header class="fade-in">
     <h1>VR_Audio</h1>
-    <a href="/admin/" class="login-btn" title="Belépés az admin felületre">Belépés</a>
+    <button class="contact-btn" onclick="document.getElementById('kapcsolat').scrollIntoView({ behavior: 'smooth' });">Kapcsolat</button>
   </header>
 
   <div class="ads-container" id="adsContainer"></div>
@@ -262,3 +269,4 @@
   </footer>
 </body>
 </html>
+
