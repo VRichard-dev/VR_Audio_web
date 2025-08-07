@@ -67,13 +67,13 @@
   </main>
 
   <!-- Auth0 JS SDK -->
-  <script src="https://cdn.auth0.com/js/auth0-spa-js/1.19/auth0-spa-js.production.js"></script>
+  <script src="https://cdn.auth0.com/js/auth0/9.19/auth0.min.js"></script>
 
   <script>
-    // Auth0 konfiguráció (cseréld ki a saját adataiddal)
-    const auth0 = new auth0.WebAuth({
-      domain: "YOUR_AUTH0_DOMAIN",
-      clientID: "YOUR_AUTH0_CLIENT_ID",
+    // Auth0 konfiguráció
+    var webAuth = new auth0.WebAuth({
+      domain: "dev-1k4duchefaqtjltq.eu.auth0.com",
+      clientID: "kzHrHB7oC6GG8WEnIlRJTLMGNsNfC0qW",
       redirectUri: window.location.origin + "/admin/",
       responseType: "token id_token",
       scope: "openid profile email"
@@ -82,15 +82,21 @@
     const loginBtn = document.getElementById('login-btn');
     const logoutBtn = document.getElementById('logout-btn');
 
-    // Ellenőrizzük a bejelentkezett felhasználót
-    function checkSession() {
-      auth0.checkSession({}, function(err, authResult) {
+    function handleAuthentication() {
+      webAuth.parseHash(function(err, authResult) {
         if (authResult && authResult.accessToken && authResult.idToken) {
+          window.location.hash = '';
+          localStorage.setItem('accessToken', authResult.accessToken);
           showLogout();
-        } else {
-          showLogin();
+        } else if (err) {
+          console.error(err);
+          alert('Bejelentkezési hiba: ' + err.errorDescription);
         }
       });
+    }
+
+    function isAuthenticated() {
+      return !!localStorage.getItem('accessToken');
     }
 
     function showLogin() {
@@ -104,19 +110,23 @@
     }
 
     loginBtn.addEventListener('click', function() {
-      auth0.authorize();
+      webAuth.authorize();
     });
 
     logoutBtn.addEventListener('click', function() {
-      auth0.logout({
+      localStorage.removeItem('accessToken');
+      webAuth.logout({
         returnTo: window.location.origin + "/admin/"
       });
       showLogin();
     });
 
-    // Ezt hívd meg az oldal betöltésekor
     window.onload = function() {
-      checkSession();
+      if (isAuthenticated()) {
+        showLogout();
+      } else {
+        handleAuthentication();
+      }
     };
   </script>
 </body>
