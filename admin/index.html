@@ -48,6 +48,7 @@
       margin-top: 2rem;
       font-size: 1.1rem;
       color: #aaa;
+      max-width: 500px;
     }
   </style>
 </head>
@@ -65,7 +66,11 @@
   <script>
     let auth0 = null;
 
-    // BEÁLLÍTÁSOK: Ide illeszd be az Auth0 domain-ed és client ID-d!
+    const allowedUsers = [
+      "vecseyr1@gmail.com",
+      "riki.vecsey@gmail.com"
+    ];
+
     const config = {
       domain: "dev-1k4duchefaqtjltq.eu.auth0.com",
       clientId: "kzHrHB7oC6GG8WEnIlRJTLMGNsNfC0qW",
@@ -89,10 +94,24 @@
       const isAuthenticated = await auth0.isAuthenticated();
 
       if (isAuthenticated) {
+        const user = await auth0.getUser();
+        if (!allowedUsers.includes(user.email)) {
+          message.textContent = "Sajnáljuk, nincs hozzáférésed ehhez az oldalhoz.";
+          logoutBtn.style.display = 'none';
+          loginBtn.style.display = 'none';
+
+          setTimeout(() => {
+            auth0.logout({
+              returnTo: window.location.origin + "/admin/"
+            });
+          }, 3000);
+          return;
+        }
+
         loginBtn.style.display = 'none';
         logoutBtn.style.display = 'inline-block';
-        message.textContent = "Sikeresen be vagy jelentkezve. Most már szerkesztheted a hirdetéseket!";
-        // Itt átirányít a főoldalra
+        message.textContent = `Üdvözlünk, ${user.email}! Most már szerkesztheted a hirdetéseket.`;
+
         window.location.href = "/";
       } else {
         loginBtn.style.display = 'inline-block';
