@@ -21,15 +21,7 @@ collections:
             allow_add: true
             allow_delete: true
             fields:
-              - label: "Kép URL"
-                name: "img"
-                widget: string
-              - label: "Leírás"
-                name: "description"
-                widget: text
-              - label: "Kapcsolat"
-                name: "contact"
-                widget: string
-              - label: "Ár"
-                name: "price"
-                widget: string
+              - { label: "Kép URL", name: "img", widget: string }
+              - { label: "Leírás", name: "description", widget: text }
+              - { label: "Kapcsolat", name: "contact", widget: string }
+              - { label: "Ár", name: "price", widget: string }
