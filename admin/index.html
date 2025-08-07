@@ -4,130 +4,75 @@
   <meta charset="UTF-8" />
   <title>Admin – VR_Audio</title>
   <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #121212;
-      color: #eee;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
-    header {
-      background-color: #00e5ff;
-      color: #000;
-      padding: 1rem 2rem;
-      text-align: center;
-      font-weight: bold;
-      font-size: 1.5rem;
-      box-shadow: 0 2px 8px rgba(0, 229, 255, 0.5);
-    }
-    main {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-    }
-    #login-container {
-      background: rgba(0, 229, 255, 0.1);
-      padding: 2rem 3rem;
-      border-radius: 12px;
-      box-shadow: 0 0 20px rgba(0, 229, 255, 0.4);
-      max-width: 400px;
-      width: 100%;
-      text-align: center;
-    }
-    button {
-      cursor: pointer;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 8px;
-      font-weight: bold;
-      font-size: 1rem;
-      background-color: #00e5ff;
-      color: #000;
-      transition: background-color 0.3s ease;
-    }
-    button:hover {
-      background-color: #007ea7;
-      color: #fff;
-    }
+    body { font-family: Arial, sans-serif; margin:0; padding:0; }
+    #cms-root { display:none; }
+    button { margin: 10px; padding: 10px 20px; font-size: 16px; cursor: pointer; }
   </style>
 </head>
 <body>
-  <header>VR_Audio Admin Felület</header>
-  <main>
-    <div id="login-container">
-      <h2>Bejelentkezés vagy Regisztráció</h2>
-      <button id="login-btn">Bejelentkezés / Regisztráció</button>
-      <button id="logout-btn" style="display:none; margin-top: 10px;">Kijelentkezés</button>
-    </div>
-  </main>
+
+  <button id="login-btn">Bejelentkezés / Regisztráció</button>
+  <button id="logout-btn" style="display:none;">Kijelentkezés</button>
+
+  <!-- Netlify CMS konténer -->
+  <div id="cms-root"></div>
 
   <!-- Auth0 JS SDK -->
-  <script src="https://cdn.auth0.com/js/auth0/9.19/auth0.min.js"></script>
+  <script src="https://cdn.auth0.com/js/auth0-spa-js/1.19/auth0-spa-js.production.js"></script>
+
+  <!-- Netlify CMS -->
+  <script src="https://unpkg.com/netlify-cms@^2.0.0/dist/netlify-cms.js"></script>
 
   <script>
-    // Auth0 konfiguráció
-    var webAuth = new auth0.WebAuth({
-      domain: "dev-1k4duchefaqtjltq.eu.auth0.com",
-      clientID: "kzHrHB7oC6GG8WEnIlRJTLMGNsNfC0qW",
-      redirectUri: window.location.origin + "/admin/",
-      responseType: "token id_token",
-      scope: "openid profile email"
-    });
-
+    let auth0 = null;
     const loginBtn = document.getElementById('login-btn');
     const logoutBtn = document.getElementById('logout-btn');
+    const cmsRoot = document.getElementById('cms-root');
 
-    function handleAuthentication() {
-      webAuth.parseHash(function(err, authResult) {
-        if (authResult && authResult.accessToken && authResult.idToken) {
-          window.location.hash = '';
-          localStorage.setItem('accessToken', authResult.accessToken);
-          showLogout();
-        } else if (err) {
-          console.error(err);
-          alert('Bejelentkezési hiba: ' + err.errorDescription);
-        }
+    // Auth0 konfiguráció (cseréld ki a saját értékeidre!)
+    const config = {
+      domain: "dev-1k4duchefaqtjltq.eu.auth0.com",
+      client_id: "kzHrHB7oC6GG8WEnIlRJTLMGNsNfC0qW",
+      redirect_uri: window.location.origin + "/admin/"
+    };
+
+    async function configureClient() {
+      auth0 = await createAuth0Client({
+        domain: config.domain,
+        client_id: config.client_id,
+        redirect_uri: config.redirect_uri,
       });
     }
 
-    function isAuthenticated() {
-      return !!localStorage.getItem('accessToken');
-    }
+    async function updateUI() {
+      const isAuthenticated = await auth0.isAuthenticated();
 
-    function showLogin() {
-      loginBtn.style.display = "inline-block";
-      logoutBtn.style.display = "none";
-    }
-
-    function showLogout() {
-      loginBtn.style.display = "none";
-      logoutBtn.style.display = "inline-block";
-    }
-
-    loginBtn.addEventListener('click', function() {
-      webAuth.authorize();
-    });
-
-    logoutBtn.addEventListener('click', function() {
-      localStorage.removeItem('accessToken');
-      webAuth.logout({
-        returnTo: window.location.origin + "/admin/"
-      });
-      showLogin();
-    });
-
-    window.onload = function() {
-      if (isAuthenticated()) {
-        showLogout();
+      if (isAuthenticated) {
+        loginBtn.style.display = 'none';
+        logoutBtn.style.display = 'inline-block';
+        cmsRoot.style.display = 'block'; // Megjeleníti a CMS-t
       } else {
-        handleAuthentication();
+        loginBtn.style.display = 'inline-block';
+        logoutBtn.style.display = 'none';
+        cmsRoot.style.display = 'none';
       }
+    }
+
+    window.onload = async () => {
+      await configureClient();
+
+      // Login callback kezelése
+      if (window.location.search.includes('code=') && window.location.search.includes('state=')) {
+        await auth0.handleRedirectCallback();
+        window.history.replaceState({}, document.title, "/admin/");
+      }
+
+      await updateUI();
+
+      loginBtn.addEventListener('click', () => auth0.loginWithRedirect());
+      logoutBtn.addEventListener('click', () => auth0.logout({ returnTo: window.location.origin + "/admin/" }));
     };
   </script>
+
 </body>
 </html>
