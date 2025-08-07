@@ -1,23 +1,23 @@
 <!DOCTYPE html>
-<html>
+<html lang="hu">
 <head>
   <meta charset="UTF-8" />
   <title>Admin – VR_Audio</title>
 </head>
 <body>
-  <!-- Netlify CMS -->
+  <!-- Netlify CMS betöltése -->
   <script src="https://unpkg.com/netlify-cms@^2.0.0/dist/netlify-cms.js"></script>
 
-  <!-- Netlify Identity Widget a bejelentkezéshez / regisztrációhoz -->
+  <!-- Netlify Identity Widget a regisztrációhoz és bejelentkezéshez -->
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
   <script>
     if (window.netlifyIdentity) {
       window.netlifyIdentity.on("init", user => {
         if (!user) {
-          window.netlifyIdentity.open();  // Ez megnyitja a bejelentkezési/regisztrációs ablakot
+          window.netlifyIdentity.open();  // Automatikusan megnyitja a bejelentkezési/regisztrációs ablakot
         }
         window.netlifyIdentity.on("login", () => {
-          document.location.href = "/admin/";
+          document.location.href = "/admin/";  // Belépés után betölti az admin oldalt
         });
       });
       window.netlifyIdentity.init();

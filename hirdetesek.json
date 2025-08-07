@@ -5,6 +5,12 @@
       "description": "🔧 Teszt kép - Postimages link",
       "contact": "📞 +36 70 277 4455",
       "price": "💰 60 000 Ft"
+    },
+    {
+      "img": "https://i.postimg.cc/xyz/valami.jpg",
+      "description": "Másik termék leírása",
+      "contact": "📞 +36 30 123 4567",
+      "price": "💰 80 000 Ft"
     }
   ]
 }
