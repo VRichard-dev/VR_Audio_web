@@ -1,8 +1,10 @@
-[
-  {
-    "img": "https://i.postimg.cc/4N3nVRQY/e1bd28dc-56e4-404c-a581-f8024654dd40.jpg",
-    "description": "🔧 Teszt kép - Postimages link",
-    "contact": "📞 +36 70 277 4455",
-    "price": "💰 60 000 Ft"
-  }
-]
+{
+  "ads": [
+    {
+      "img": "https://i.postimg.cc/4N3nVRQY/e1bd28dc-56e4-404c-a581-f8024654dd40.jpg",
+      "description": "🔧 Teszt kép - Postimages link",
+      "contact": "📞 +36 70 277 4455",
+      "price": "💰 60 000 Ft"
+    }
+  ]
+}
