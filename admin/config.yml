@@ -1,9 +1,9 @@
 backend:
   name: git-gateway
-  branch: main
+  branch: main  # Az a git branch, amit használsz (pl. main vagy master)
 
-media_folder: "images"
-public_folder: "/images"
+media_folder: "images"       # A képek helye a repo-ban
+public_folder: "/images"     # Ahonnan a weboldal betölti a képeket
 
 collections:
   - name: "hirdetesek"
