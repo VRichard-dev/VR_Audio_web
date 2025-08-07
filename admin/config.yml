@@ -1,0 +1,28 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "images"
+public_folder: "/images"
+
+collections:
+  - name: "hirdetesek"
+    label: "Hirdetések"
+    label_singular: "Hirdetés"
+    files:
+      - file: "hirdetesek.json"
+        label: "Hirdetések listája"
+        name: "hirdetesek"
+        format: "json"
+        fields:
+          - label: "Hirdetések"
+            name: "ads"
+            widget: list
+            allow_add: true
+            allow_delete: true
+            fields:
+              - { label: "Kép URL", name: "img", widget: string }
+              - { label: "Leírás", name: "description", widget: text }
+              - { label: "Kapcsolat", name: "contact", widget: string }
+              - { label: "Ár", name: "price", widget: string }
+
