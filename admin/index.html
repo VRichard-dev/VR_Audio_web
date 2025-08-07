@@ -39,6 +39,17 @@
       width: 100%;
       text-align: center;
     }
+    #logout-btn {
+      margin-top: 1rem;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 8px;
+      background-color: #ff4d4d;
+      color: #fff;
+      cursor: pointer;
+      font-weight: bold;
+      display: none;
+    }
   </style>
 </head>
 <body>
@@ -47,36 +58,49 @@
     <div id="login-container">
       <h2>Bejelentkezés vagy Regisztráció</h2>
       <button id="login-btn">Bejelentkezés / Regisztráció</button>
+      <button id="logout-btn">Kijelentkezés</button>
     </div>
   </main>
 
+  <!-- Netlify Identity widget -->
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <!-- Netlify CMS -->
   <script src="https://unpkg.com/netlify-cms@^2.0.0/dist/netlify-cms.js"></script>
   <script>
     const identity = window.netlifyIdentity;
-
     const loginBtn = document.getElementById('login-btn');
+    const logoutBtn = document.getElementById('logout-btn');
 
-    if(identity) {
+    if (identity) {
       identity.on('init', user => {
-        if(user) {
-          // Ha már be van jelentkezve, automatikusan átirányítjuk az admin szerkesztő felületre
-          window.location.href = '/admin/';
+        if (user) {
+          // Ha be van jelentkezve, elrejtjük a login gombot és megjelenítjük a logout gombot
+          loginBtn.style.display = 'none';
+          logoutBtn.style.display = 'inline-block';
+        } else {
+          // Ha nincs bejelentkezve, megnyitjuk automatikusan a login ablakot
+          identity.open();
         }
       });
 
       identity.init();
 
       loginBtn.addEventListener('click', () => {
-        identity.open(); // Megnyitja a bejelentkezési/regisztrációs widgetet
+        identity.open();
+      });
+
+      logoutBtn.addEventListener('click', () => {
+        identity.logout();
       });
 
       identity.on('login', () => {
         identity.close();
+        // Átirányítás a Netlify CMS szerkesztő felületére
         window.location.href = '/admin/';
       });
 
       identity.on('logout', () => {
+        // Oldal frissítése kijelentkezés után
         window.location.reload();
       });
     } else {
