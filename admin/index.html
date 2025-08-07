@@ -3,24 +3,84 @@
 <head>
   <meta charset="UTF-8" />
   <title>Admin – VR_Audio</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #121212;
+      color: #eee;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    header {
+      background-color: #00e5ff;
+      color: #000;
+      padding: 1rem 2rem;
+      text-align: center;
+      font-weight: bold;
+      font-size: 1.5rem;
+      box-shadow: 0 2px 8px rgba(0, 229, 255, 0.5);
+    }
+    main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    }
+    #login-container {
+      background: rgba(0, 229, 255, 0.1);
+      padding: 2rem 3rem;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0, 229, 255, 0.4);
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
-  <!-- Netlify CMS betöltése -->
-  <script src="https://unpkg.com/netlify-cms@^2.0.0/dist/netlify-cms.js"></script>
+  <header>VR_Audio Admin Felület</header>
+  <main>
+    <div id="login-container">
+      <h2>Bejelentkezés vagy Regisztráció</h2>
+      <button id="login-btn">Bejelentkezés / Regisztráció</button>
+    </div>
+  </main>
 
-  <!-- Netlify Identity Widget a regisztrációhoz és bejelentkezéshez -->
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <script src="https://unpkg.com/netlify-cms@^2.0.0/dist/netlify-cms.js"></script>
   <script>
-    if (window.netlifyIdentity) {
-      window.netlifyIdentity.on("init", user => {
-        if (!user) {
-          window.netlifyIdentity.open();  // Automatikusan megnyitja a bejelentkezési/regisztrációs ablakot
+    const identity = window.netlifyIdentity;
+
+    const loginBtn = document.getElementById('login-btn');
+
+    if(identity) {
+      identity.on('init', user => {
+        if(user) {
+          // Ha már be van jelentkezve, automatikusan átirányítjuk az admin szerkesztő felületre
+          window.location.href = '/admin/';
         }
-        window.netlifyIdentity.on("login", () => {
-          document.location.href = "/admin/";  // Belépés után betölti az admin oldalt
-        });
       });
-      window.netlifyIdentity.init();
+
+      identity.init();
+
+      loginBtn.addEventListener('click', () => {
+        identity.open(); // Megnyitja a bejelentkezési/regisztrációs widgetet
+      });
+
+      identity.on('login', () => {
+        identity.close();
+        window.location.href = '/admin/';
+      });
+
+      identity.on('logout', () => {
+        window.location.reload();
+      });
+    } else {
+      document.getElementById('login-container').innerHTML = '<p>Netlify Identity nem elérhető.</p>';
     }
   </script>
 </body>
