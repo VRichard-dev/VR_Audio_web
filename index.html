@@ -177,7 +177,8 @@
 
     fetch("hirdetesek.json")
       .then(response => response.json())
-      .then(ads => {
+      .then(data => {
+        const ads = data.ads;
         for (let i = 0; i < ads.length && i < maxAds; i++) {
           const ad = ads[i];
           const card = document.createElement("div");
