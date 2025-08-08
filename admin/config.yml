@@ -1,9 +1,9 @@
 backend:
   name: git-gateway
-  branch: main  # Az a git branch, amit használsz (pl. main vagy master)
+  branch: main  # vagy 'master', attól függ, mi a fő ág a GitHub repóban
 
-media_folder: "images"       # A képek helye a repo-ban
-public_folder: "/images"     # Ahonnan a weboldal betölti a képeket
+media_folder: "images"        # ide kerülnek a feltöltött képek (GitHub repóban)
+public_folder: "/images"      # innen tölti be őket a weboldal
 
 collections:
   - name: "hirdetesek"
@@ -21,7 +21,15 @@ collections:
             allow_add: true
             allow_delete: true
             fields:
-              - { label: "Kép URL", name: "img", widget: string }
-              - { label: "Leírás", name: "description", widget: text }
-              - { label: "Kapcsolat", name: "contact", widget: string }
-              - { label: "Ár", name: "price", widget: string }
+              - label: "Kép URL"
+                name: "img"
+                widget: string
+              - label: "Leírás"
+                name: "description"
+                widget: text
+              - label: "Kapcsolat"
+                name: "contact"
+                widget: string
+              - label: "Ár"
+                name: "price"
+                widget: string

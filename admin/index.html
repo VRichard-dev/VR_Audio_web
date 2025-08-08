@@ -2,18 +2,18 @@
 <html lang="hu">
 <head>
   <meta charset="UTF-8" />
-  <title>Admin – VR_Audio</title>
+  <title>VR_Audio – Admin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <style>
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #121212;
-      color: #eee;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
       margin: 0;
       padding: 0;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
+      color: #fff;
     }
+
     header {
       background-color: #00e5ff;
       color: #000;
@@ -23,123 +23,19 @@
       font-size: 1.5rem;
       box-shadow: 0 2px 8px rgba(0, 229, 255, 0.5);
     }
+
     main {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-      text-align: center;
-    }
-    #message {
-      font-size: 1.2rem;
-      margin-bottom: 20px;
-    }
-    button {
-      cursor: pointer;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 8px;
-      font-weight: bold;
-      font-size: 1rem;
-      background-color: #00e5ff;
-      color: #000;
-      transition: background-color 0.3s ease;
-    }
-    button:hover {
-      background-color: #007ea7;
-      color: #fff;
+      padding: 2rem;
     }
   </style>
+
+  <!-- Netlify CMS -->
+  <script src="https://unpkg.com/netlify-cms@^2.0.0/dist/netlify-cms.js"></script>
 </head>
 <body>
-  <header>VR_Audio Admin Felület</header>
+  <header>VR_Audio – Admin Felület</header>
   <main>
-    <div>
-      <div id="message">Kérlek jelentkezz be az admin felület használatához.</div>
-      <button id="login-btn">Belépés / Regisztráció</button>
-      <button id="logout-btn" style="display:none; margin-left: 10px;">Kijelentkezés</button>
-    </div>
+    <p>Az alábbi felületen új hirdetést adhatsz fel, meglévőket törölhetsz vagy módosíthatsz.</p>
   </main>
-
-  <script src="https://cdn.auth0.com/js/auth0-spa-js/1.19/auth0-spa-js.production.js"></script>
-  <script>
-    const auth0Domain = "dev-1k4duchefaqtjltq.eu.auth0.com";
-    const auth0ClientId = "kzHrHB7oC6GG8WEnIlRJTLMGNsNfC0qW";
-
-    let auth0 = null;
-
-    const loginBtn = document.getElementById('login-btn');
-    const logoutBtn = document.getElementById('logout-btn');
-    const messageDiv = document.getElementById('message');
-
-    async function configureClient() {
-      auth0 = await createAuth0Client({
-        domain: auth0Domain,
-        client_id: auth0ClientId,
-        // FONTOS: Ez egyezzen az Auth0 Dashboard "Allowed Callback URLs"-ban beállított URL-el!
-        redirect_uri: window.location.origin + "/admin/"
-      });
-    }
-
-    async function updateUI() {
-      const isAuthenticated = await auth0.isAuthenticated();
-
-      if (isAuthenticated) {
-        const user = await auth0.getUser();
-        const allowedEmails = ["vecseyr1@gmail.com", "riki.vecsey@gmail.com"];
-
-        if (allowedEmails.includes(user.email)) {
-          messageDiv.textContent = `Szia, ${user.email}! Üdvözöllek az admin felületen.`;
-
-          loginBtn.style.display = "none";
-          logoutBtn.style.display = "inline-block";
-
-          // Sikeres belépés után átirányítás az editor oldalra (ahol a szerkesztő felület van)
-          window.location.href = "/admin/editor.html";
-
-        } else {
-          messageDiv.textContent = "Sajnálom, nincs hozzáférésed az admin felülethez.";
-          loginBtn.style.display = "none";
-          logoutBtn.style.display = "inline-block";
-
-          // Ha nincs jogosultság, azonnal kiléptetjük és az admin oldalra visszadobjuk
-          await auth0.logout({ returnTo: window.location.origin + "/admin/" });
-        }
-      } else {
-        messageDiv.textContent = "Kérlek jelentkezz be az admin felület használatához.";
-        loginBtn.style.display = "inline-block";
-        logoutBtn.style.display = "none";
-      }
-    }
-
-    window.onload = async () => {
-      await configureClient();
-
-      // Kezeljük az Auth0 visszatérést a redirect után (token feldolgozás)
-      const query = window.location.search;
-      if (query.includes("code=") && query.includes("state=")) {
-        try {
-          await auth0.handleRedirectCallback();
-          // FONTOS: Az URL frissítése, hogy ne maradjon benne a query paraméter
-          window.history.replaceState({}, document.title, window.location.pathname);
-        } catch (err) {
-          console.error("Hiba a redirect feldolgozásakor:", err);
-        }
-      }
-
-      await updateUI();
-    };
-
-    loginBtn.onclick = async () => {
-      await auth0.loginWithRedirect();
-    };
-
-    logoutBtn.onclick = async () => {
-      await auth0.logout({ returnTo: window.location.origin + "/admin/" });
-      await updateUI();
-    };
-  </script>
 </body>
 </html>
-
