@@ -1,41 +1,16 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="hu">
-<head>
-  <meta charset="UTF-8" />
-  <title>VR_Audio – Admin</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
-      margin: 0;
-      padding: 0;
-      color: #fff;
-    }
-
-    header {
-      background-color: #00e5ff;
-      color: #000;
-      padding: 1rem 2rem;
-      text-align: center;
-      font-weight: bold;
-      font-size: 1.5rem;
-      box-shadow: 0 2px 8px rgba(0, 229, 255, 0.5);
-    }
-
-    main {
-      padding: 2rem;
-    }
-  </style>
-
-  <!-- Netlify CMS -->
-  <script src="https://unpkg.com/netlify-cms@^2.0.0/dist/netlify-cms.js"></script>
-</head>
-<body>
-  <header>VR_Audio – Admin Felület</header>
-  <main>
-    <p>Az alábbi felületen új hirdetést adhatsz fel, meglévőket törölhetsz vagy módosíthatsz.</p>
-  </main>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <title>VR_Audio – Admin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- (opcionális) CMS alap CSS, néha segít render gondnál -->
+    <link rel="stylesheet" href="https://unpkg.com/netlify-cms@^2.0.0/dist/netlify-cms.css">
+  </head>
+  <body>
+    <!-- Identity widget: kell a Netlify Identity-hez / Git Gateway-hez -->
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <!-- A CMS maga -->
+    <script src="https://unpkg.com/netlify-cms@^2.0.0/dist/netlify-cms.js"></script>
+  </body>
 </html>
