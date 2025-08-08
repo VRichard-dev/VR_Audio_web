@@ -1,12 +1,2 @@
-[identity]
-# Email megerősítés utáni átirányítás
-confirmation_redirect = "/admin/login.html"
-
 [build]
-  publish = "."  # vagy "public", ha a te oldalad onnan tölt be
-
-[[redirects]]
-  from = "/.netlify/identity/verify"
-  to = "/admin/login.html"
-  status = 301
-  force = true
+  publish = "."
