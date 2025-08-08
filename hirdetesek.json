@@ -5,18 +5,6 @@
       "description": "🔧 Teszt kép - Postimages link",
       "contact": "📞 +36 70 277 4455",
       "price": "💰 60 000 Ft"
-    },
-    {
-      "img": "https://i.postimg.cc/xyz/valami.jpg",
-      "description": "Másik termék leírása",
-      "contact": "📞 +36 30 123 4567",
-      "price": "💰 80 000 Ft"
-    },
-    {
-      "img": "https://i.postimg.cc/4N3nVRQY/e1bd28dc-56e4-404c-a581-f8024654dd40.jpg",
-      "description": "Végre sikerült volna az egész ?-Kitudja,lehet nem,de lehet igen mindjárt kiderül.\n",
-      "contact": "vecseyr1@gmail.com szia,heló",
-      "price": "💰 65.000$"
     }
   ]
 }
